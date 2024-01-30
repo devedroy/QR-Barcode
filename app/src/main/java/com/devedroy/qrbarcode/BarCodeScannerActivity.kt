@@ -52,7 +52,7 @@ class BarCodeScannerActivity : AppCompatActivity() {
         val cameraSelector: CameraSelector =
             CameraSelector.Builder().requireLensFacing(CameraSelector.LENS_FACING_BACK).build()
         val imageAnalysis = ImageAnalysis.Builder()
-            .setTargetResolution(Size(binding.cameraPreview.width, binding.cameraPreview.height))
+//            .setTargetResolution(Size(binding.cameraPreview.width, binding.cameraPreview.height))
             .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST).build()
 
         val orientationEventListener = object : OrientationEventListener(this as Context) {
