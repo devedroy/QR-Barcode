@@ -23,9 +23,6 @@ class MainActivity : AppCompatActivity() {
             triggerScan()
         }
 
-        binding.btnTest.setOnClickListener {
-            startActivity(Intent(this@MainActivity, TestActivity::class.java))
-        }
     }
 
     private fun triggerScan() {
