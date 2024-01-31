@@ -1,25 +1,23 @@
 package com.devedroy.qrbarcode
 
-import androidx.appcompat.app.AppCompatActivity
-import android.os.Bundle
-import androidx.core.content.ContextCompat
-import com.devedroy.qrbarcode.databinding.ActivityMainBinding
 import android.Manifest
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.net.Uri
-import android.provider.Settings
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.widget.LinearLayout
 import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
+import com.devedroy.qrbarcode.databinding.ActivityMainBinding
 
-class QRScanner(private val ctx: Context, val attributeSet: AttributeSet) : LinearLayout(ctx, attributeSet) {
+class QRScanner(private val ctx: Context, val attributeSet: AttributeSet) :
+    LinearLayout(ctx, attributeSet) {
     private val CAMERA_PERMISSION_CODE = 123
 
     private val binding = ActivityMainBinding.inflate(LayoutInflater.from(context), this, true)
+
     init {
         binding.btnScan.setOnClickListener {
             triggerScan()
