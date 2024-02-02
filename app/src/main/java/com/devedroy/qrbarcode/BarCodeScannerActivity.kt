@@ -42,6 +42,9 @@ class BarCodeScannerActivity : AppCompatActivity() {
             bindPreview(cameraProvider)
         }, ContextCompat.getMainExecutor(this))
 
+        setSupportActionBar(binding.toolbar)
+        binding.tvTitle.text = receivedData.title
+        binding.tvDescription.text = receivedData.description
         binding.overLay.setScrimColor(receivedData.backgroundColor)
         binding.overLay.post {
             binding.overLay.setViewFinder()
