@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="ViewFinderOverlay">
+        <attr name="scrimColor" format="color" />
+    </declare-styleable>
+</resources>

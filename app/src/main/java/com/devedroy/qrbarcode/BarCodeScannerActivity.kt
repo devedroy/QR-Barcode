@@ -1,6 +1,9 @@
 package com.devedroy.qrbarcode
 
+import android.app.Activity
 import android.content.Context
+import android.content.Intent
+import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Size
@@ -29,6 +32,8 @@ class BarCodeScannerActivity : AppCompatActivity() {
         binding = ActivityBarCodeScannerBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        val receivedData = intent.getSerializableExtra(BarcodeConstants.SEND_DATA) as BarcodeView
+
         cameraProviderFuture = ProcessCameraProvider.getInstance(this)
         cameraExecutor = Executors.newSingleThreadExecutor()
 
@@ -37,6 +42,7 @@ class BarCodeScannerActivity : AppCompatActivity() {
             bindPreview(cameraProvider)
         }, ContextCompat.getMainExecutor(this))
 
+        binding.overLay.setScrimColor(receivedData.backgroundColor)
         binding.overLay.post {
             binding.overLay.setViewFinder()
         }
@@ -52,7 +58,7 @@ class BarCodeScannerActivity : AppCompatActivity() {
         val cameraSelector: CameraSelector =
             CameraSelector.Builder().requireLensFacing(CameraSelector.LENS_FACING_BACK).build()
         val imageAnalysis = ImageAnalysis.Builder()
-//            .setTargetResolution(Size(binding.cameraPreview.width, binding.cameraPreview.height))
+            .setTargetResolution(Size(binding.cameraPreview.width, binding.cameraPreview.height))
             .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST).build()
 
         val orientationEventListener = object : OrientationEventListener(this as Context) {
@@ -73,17 +79,21 @@ class BarCodeScannerActivity : AppCompatActivity() {
                 runOnUiThread {
                     imageAnalysis.clearAnalyzer()
                     cameraProvider?.unbindAll()
-                    ScannerResultDialog.newInstance(result,
-                        object : ScannerResultDialog.DialogDismissListener {
-                            override fun onDismiss() {
-                                bindPreview(cameraProvider)
-                            }
-                        }).show(supportFragmentManager, ScannerResultDialog::class.java.simpleName)
+//                    ScannerResultDialog.newInstance(result,
+//                        object : ScannerResultDialog.DialogDismissListener {
+//                            override fun onDismiss() {
+//                                bindPreview(cameraProvider)
+//                            }
+//                        }).show(supportFragmentManager, ScannerResultDialog::class.java.simpleName)
+                    val intent = Intent()
+                    intent.putExtra(BarcodeConstants.RECEIVE_DATA, result)
+                    setResult(RESULT_OK, intent)
+                    finish()
                 }
             }
         }
 
-        var analyzer: ImageAnalysis.Analyzer = MLKitBarcodeAnalyzer(ScanningListener())
+        val analyzer: ImageAnalysis.Analyzer = MLKitBarcodeAnalyzer(ScanningListener())
         imageAnalysis.setAnalyzer(cameraExecutor, analyzer)
         preview.setSurfaceProvider(binding.cameraPreview.surfaceProvider)
         val camera = cameraProvider?.bindToLifecycle(this, cameraSelector, imageAnalysis, preview)
@@ -101,8 +111,6 @@ class BarCodeScannerActivity : AppCompatActivity() {
                         flashEnabled = false
                         binding.ivFlashControl.setImageResource(R.drawable.ic_round_flash_on)
                     }
-
-
                 }
             }
         }

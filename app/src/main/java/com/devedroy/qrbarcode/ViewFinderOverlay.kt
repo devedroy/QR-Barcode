@@ -11,6 +11,9 @@ import android.view.View
 import androidx.core.content.ContextCompat
 
 class ViewFinderOverlay(context: Context, attrs: AttributeSet) : View(context, attrs) {
+    private var scrimColor: Int =
+        ContextCompat.getColor(context, R.color.barcode_reticle_background)
+
     private val boxPaint: Paint = Paint().apply {
         color = ContextCompat.getColor(context, R.color.white)
         style = Paint.Style.STROKE
@@ -58,5 +61,11 @@ class ViewFinderOverlay(context: Context, attrs: AttributeSet) : View(context, a
             canvas.drawRoundRect(it, boxCornerRadius, boxCornerRadius, eraserPaint)
             canvas.drawRoundRect(it, boxCornerRadius, boxCornerRadius, boxPaint)
         }
+    }
+
+    fun setScrimColor(parseColor: Int) {
+        scrimColor = parseColor
+        scrimPaint.color = scrimColor
+        invalidate()
     }
 }
